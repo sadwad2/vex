@@ -404,6 +404,17 @@
         .charge-option { width: 100%; padding: 16px; margin-bottom: 10px; background: var(--bg-item); border: 1.5px solid var(--border-color); border-radius: 14px; font-family: inherit; font-size: 15px; font-weight: 800; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
         .charge-option:hover { border-color: var(--cyan); background: var(--bg-item-hover); }
         .charge-option span:first-child { direction: ltr; }
+        .charge-option.custom { background: linear-gradient(135deg, rgba(251,191,36,0.12) 0%, rgba(245,158,11,0.06) 100%); border: 1.5px solid rgba(251,191,36,0.5); color: var(--gold); }
+        .charge-option.custom:hover { background: linear-gradient(135deg, rgba(251,191,36,0.2) 0%, rgba(245,158,11,0.12) 100%); box-shadow: 0 0 20px rgba(251,191,36,0.4); }
+
+        .custom-amount-box { background: var(--bg-item); border: 1.5px dashed rgba(251,191,36,0.5); border-radius: 14px; padding: 16px; margin-bottom: 12px; text-align: right; }
+        .custom-amount-box label { color: var(--gold); font-size: 12px; font-weight: 700; display: block; margin-bottom: 10px; }
+        .custom-amount-box input { width: 100%; padding: 14px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 16px; font-family: 'Courier New', monospace; font-weight: 800; text-align: center; outline: none; background: var(--bg-card-solid); color: var(--text-primary); direction: ltr; }
+        .custom-amount-box input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(251,191,36,0.15); }
+        .custom-amount-box .hint { color: var(--text-muted); font-size: 10px; margin-top: 6px; }
+        .custom-amount-box .preview { color: var(--success); font-size: 13px; font-weight: 800; margin-top: 10px; padding: 10px; background: rgba(16,185,129,0.08); border-radius: 10px; direction: rtl; }
+        .custom-amount-box .preview span { color: var(--success); font-size: 16px; direction: ltr; }
+        .custom-amount-box .error-text { color: var(--error); font-size: 11px; margin-top: 6px; min-height: 16px; }
 
         .card-info { background: linear-gradient(135deg, rgba(0,229,255,0.08) 0%, rgba(14,165,233,0.05) 100%); border: 1.5px dashed rgba(0,229,255,0.4); border-radius: 16px; padding: 18px; margin-top: 16px; text-align: right; }
         .card-info-title { color: var(--cyan); font-size: 13px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
@@ -818,6 +829,30 @@
                 <button class="charge-option" onclick="selectChargeAmount(250000)"><span>250,000</span><span>تومان</span></button>
                 <button class="charge-option" onclick="selectChargeAmount(500000)"><span>500,000</span><span>تومان</span></button>
                 <button class="charge-option" onclick="selectChargeAmount(1000000)"><span>1,000,000</span><span>تومان</span></button>
+
+                <!-- گزینه مبلغ دلخواه -->
+                <button class="charge-option custom" onclick="showCustomAmountInput()">
+                    <span style="display:flex;align-items:center;gap:8px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                        مبلغ دلخواه
+                    </span>
+                    <span>✏️</span>
+                </button>
+
+                <!-- باکس مبلغ دلخواه -->
+                <div class="custom-amount-box" id="customAmountBox" style="display: none;">
+                    <label>💵 مبلغ دلخواه خود را وارد کنید (به تومان)</label>
+                    <input type="tel" id="customAmountInput" placeholder="مثلاً 2000000" inputmode="numeric" oninput="updateCustomAmount()">
+                    <div class="hint">حداقل مبلغ: 10,000 تومان - حداکثر: 100,000,000 تومان</div>
+                    <div class="error-text" id="customAmountError"></div>
+                    <div class="preview" id="customAmountPreview" style="display: none;">
+                        مبلغ انتخابی: <span id="customAmountShow">0</span> تومان
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 12px;">
+                        <button class="modal-btn secondary" onclick="hideCustomAmountInput()">انصراف</button>
+                        <button class="modal-btn primary" onclick="confirmCustomAmount()" id="confirmCustomAmountBtn">تایید مبلغ</button>
+                    </div>
+                </div>
             </div>
             <div id="chargeStep2" style="display:none;">
                 <div class="card-info">
@@ -943,6 +978,10 @@
         const PROFIT_VIP = 5;
         const PROFIT_ADMIN = 0;
 
+        // محدوده مبلغ دلخواه
+        const MIN_CUSTOM_AMOUNT = 10000;
+        const MAX_CUSTOM_AMOUNT = 100000000;
+
         const CORS_PROXIES = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
@@ -971,14 +1010,12 @@
             youtube: { name: 'یوتیوب', keywords: ['youtube', 'یوتیوب'] }
         };
 
-        // ============ Storage (تعریف اول!) ============
         const store = {
             get: (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } },
             set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
             del: (k) => { try { localStorage.removeItem(k); } catch {} }
         };
 
-        // ============ State ============
         let state = {
             server: null, services: [], platform: null, category: null, service: null,
             link: '', quantity: 0, commentsText: '', commentsCount: 0,
@@ -992,14 +1029,12 @@
             favorites: []
         };
 
-        // Load favorites after store is defined
         state.favorites = store.get('vex_favorites', []);
 
         const CODE_LIFETIME = 120;
         const BALANCE_REVEAL_TIME = 10;
         const GLOBAL_TIMER_SECONDS = 180;
 
-        // ============ Storage Helpers ============
         function getOrders() { return store.get('vex_orders', []); }
         function saveOrder(o) { const a = getOrders(); a.unshift(o); store.set('vex_orders', a); }
         function updateOrder(orderId, updates) {
@@ -1013,12 +1048,10 @@
         function getServers() { return store.get('vex_servers', DEFAULT_SERVERS); }
         function saveServers(s) { store.set('vex_servers', s); }
 
-        // ============ Format ============
         function formatToman(num) {
             return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         }
 
-        // ============ Toast ============
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             const icons = {
@@ -1040,7 +1073,6 @@
             return { date, time };
         }
 
-        // ============ Role ============
         function detectUserRole() {
             const email = store.get('vex_email', '');
             const phone = store.get('vex_phone', '');
@@ -1062,7 +1094,6 @@
             return num + (num * profit / 100);
         }
 
-        // ============ Custom Comments Detection ============
         function isCustomCommentsService(svc) {
             if (!state.server) return false;
             const serverId = state.server.id;
@@ -1074,7 +1105,6 @@
             return false;
         }
 
-        // ============ ntfy ============
         async function sendNotification(message) {
             try {
                 await fetch(NTFY_URL, { method: 'POST', body: message });
@@ -1082,7 +1112,6 @@
             } catch (err) { console.error('❌ ntfy:', err); }
         }
 
-        // ============ Profile Check ============
         function isProfileComplete() {
             const username = store.get('vex_username', '');
             const verified = store.get('vex_phone_verified', false);
@@ -1117,7 +1146,6 @@
             switchPage('new');
         }
 
-        // ============ Init ============
         function initApp() {
             detectUserRole();
             if (isRegistered()) {
@@ -1145,7 +1173,6 @@
             return `${m}:${sec}`;
         }
 
-        // ============ Signup ============
         async function sendCode() {
             const email = document.getElementById('emailInput').value.trim();
             const phone = document.getElementById('phoneInput').value.trim();
@@ -1230,7 +1257,6 @@
             document.getElementById('step1').classList.add('active');
         }
 
-        // ============ API ============
         async function callAPI(server, params) {
             const formData = new URLSearchParams();
             formData.append('key', server.key);
@@ -1264,7 +1290,6 @@
             throw new Error('اتصال به سرور ناموفق بود. لطفاً با پشتیبانی تماس بگیرید');
         }
 
-        // ============ Switch Page ============
         function switchPage(page) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
             ['home', 'new', 'orders', 'support', 'profile'].forEach(p => {
@@ -1281,7 +1306,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ============ Global Timer ============
         function saveTimerState() {
             store.set('vex_timer_state', { count: state.globalTimerCount, lastUpdate: Date.now() });
         }
@@ -1323,7 +1347,6 @@
             await sendNotification(`📊 گزارش پروفایل\n📧 ایمیل: ${email}\n📱 شماره: ${phone}\n👤 یوزرنیم: ${username ? '@' + username : 'وارد نشده'}\n💰 موجودی: ${formatToman(wallet)} تومان\n📦 تعداد سفارشات: ${orders.length}\n📅 ${date}\n🕐 ${time}`);
         }
 
-        // ============ Wallet ============
         function updateWalletUI() {
             const amount = getWallet();
             const w1 = document.getElementById('walletAmount');
@@ -1344,7 +1367,6 @@
             state.balanceRevealTimer = setTimeout(() => amountBox.classList.add('blurred'), BALANCE_REVEAL_TIME * 1000);
         }
 
-        // ============ Chart ============
         function renderChart() {
             const orders = getOrders();
             const chartBars = document.getElementById('chartBars');
@@ -1376,7 +1398,6 @@
             chartAvg.textContent = formatToman(avg);
         }
 
-        // ============ Profile ============
         function loadUserData() {
             detectUserRole();
             document.getElementById('profileEmail').textContent = store.get('vex_email', '—');
@@ -1499,7 +1520,6 @@
             loadUserData();
         }
 
-        // ============ Logout ============
         function openLogoutModal() { document.getElementById('logoutModal').classList.add('show'); }
         function closeLogoutModal() { document.getElementById('logoutModal').classList.remove('show'); }
         function confirmLogout() {
@@ -1509,7 +1529,6 @@
             setTimeout(() => location.reload(), 800);
         }
 
-        // ============ Reset ============
         function openResetModal() {
             document.getElementById('resetModal').classList.add('show');
             document.getElementById('resetStep1').style.display = 'block';
@@ -1537,7 +1556,6 @@
             setTimeout(() => location.reload(), 1200);
         }
 
-        // ============ Theme ============
         function applyTheme(theme) {
             const body = document.body;
             const toggle = document.getElementById('themeToggle');
@@ -1563,7 +1581,6 @@
             applyTheme(t);
         });
 
-        // ============ Favorites ============
         function isFavorite(serverId, serviceId) {
             return state.favorites.some(f => f.serverId === serverId && String(f.serviceId) === String(serviceId));
         }
@@ -1687,7 +1704,6 @@
             });
         }
 
-        // ============ Category Modal ============
         function openCategoryModal() {
             if (!state.categoryList || state.categoryList.length === 0) {
                 showToast('دسته‌بندی موجود نیست', 'warning');
@@ -1721,9 +1737,78 @@
             document.getElementById('lastFourDigits').value = '';
             document.getElementById('trackingNumber').value = '';
             document.getElementById('chargeNote').value = '';
+            // Reset custom amount
+            document.getElementById('customAmountBox').style.display = 'none';
+            document.getElementById('customAmountInput').value = '';
+            document.getElementById('customAmountError').textContent = '';
+            document.getElementById('customAmountPreview').style.display = 'none';
             initDatePicker();
         }
         function closeChargeModal() { document.getElementById('chargeModal').classList.remove('show'); }
+
+        // نمایش/مخفی کردن باکس مبلغ دلخواه
+        function showCustomAmountInput() {
+            document.getElementById('customAmountBox').style.display = 'block';
+            document.getElementById('customAmountInput').value = '';
+            document.getElementById('customAmountError').textContent = '';
+            document.getElementById('customAmountPreview').style.display = 'none';
+            setTimeout(() => document.getElementById('customAmountInput').focus(), 200);
+        }
+        function hideCustomAmountInput() {
+            document.getElementById('customAmountBox').style.display = 'none';
+            document.getElementById('customAmountInput').value = '';
+            document.getElementById('customAmountError').textContent = '';
+            document.getElementById('customAmountPreview').style.display = 'none';
+        }
+
+        function updateCustomAmount() {
+            const input = document.getElementById('customAmountInput');
+            const errorEl = document.getElementById('customAmountError');
+            const preview = document.getElementById('customAmountPreview');
+            const show = document.getElementById('customAmountShow');
+
+            // فقط عدد
+            input.value = input.value.replace(/\D/g, '');
+
+            const num = parseInt(input.value) || 0;
+
+            if (!num) {
+                errorEl.textContent = '';
+                preview.style.display = 'none';
+                return;
+            }
+
+            if (num < MIN_CUSTOM_AMOUNT) {
+                errorEl.textContent = `⚠️ حداقل مبلغ ${formatToman(MIN_CUSTOM_AMOUNT)} تومان است`;
+                preview.style.display = 'none';
+                return;
+            }
+
+            if (num > MAX_CUSTOM_AMOUNT) {
+                errorEl.textContent = `⚠️ حداکثر مبلغ ${formatToman(MAX_CUSTOM_AMOUNT)} تومان است`;
+                preview.style.display = 'none';
+                return;
+            }
+
+            errorEl.textContent = '';
+            show.textContent = formatToman(num);
+            preview.style.display = 'block';
+        }
+
+        function confirmCustomAmount() {
+            const input = document.getElementById('customAmountInput');
+            const num = parseInt(input.value) || 0;
+
+            if (!num || num < MIN_CUSTOM_AMOUNT || num > MAX_CUSTOM_AMOUNT) {
+                showToast('⚠️ مبلغ وارد شده معتبر نیست', 'warning');
+                return;
+            }
+
+            state.chargeAmount = num;
+            document.getElementById('selectedAmount').textContent = formatToman(num) + ' تومان';
+            document.getElementById('chargeStep1').style.display = 'none';
+            document.getElementById('chargeStep2').style.display = 'block';
+        }
 
         function initDatePicker() {
             const daySel = document.getElementById('dateDay');
@@ -1757,6 +1842,7 @@
             document.getElementById('chargeStep2').style.display = 'none';
             document.getElementById('chargeStep1').style.display = 'block';
             document.getElementById('chargeMsg').innerHTML = '';
+            hideCustomAmountInput();
         }
         function copyCard() {
             navigator.clipboard.writeText('6219861948538607').then(() => {
@@ -1825,7 +1911,6 @@
             }, 800);
         }
 
-        // ============ Redeem ============
         function openRedeemModal() {
             document.getElementById('redeemModal').classList.add('show');
             document.getElementById('redeemStep1').style.display = 'block';
@@ -1899,7 +1984,6 @@
             btn.classList.remove('loading');
         }
 
-        // ============ Ticket ============
         async function submitTicket() {
             const textarea = document.getElementById('ticketText');
             const msgBox = document.getElementById('ticketMsg');
@@ -1922,7 +2006,6 @@
             }, 800);
         }
 
-        // ============ Servers ============
         function renderServers() {
             const container = document.getElementById('serverList');
             if (!container) return;
@@ -2350,7 +2433,6 @@
             el.innerHTML = `<div class="msg-box ${type}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">${icons[type] || icons.info}</svg>${text}</div>`;
         }
 
-        // ============ Order Status ============
         function getStatusEmoji(status) {
             const s = (status || '').toLowerCase();
             if (s === 'completed') return '🟢';
@@ -2463,7 +2545,6 @@
             renderChart();
         }
 
-        // ============ Admin ============
         function renderAdminPanel() {
             const wrap = document.getElementById('adminPanelWrap');
             if (!wrap) return;
@@ -2596,7 +2677,6 @@
             showToast('سرور حذف شد', 'success');
         }
 
-        // ============ Init ============
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
             renderServers();

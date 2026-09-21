@@ -53,7 +53,6 @@
             isolation: isolate;
         }
 
-        /* ============ FRAME ============ */
         .frame-wrapper {
             flex: 1;
             position: relative;
@@ -106,7 +105,6 @@
             opacity: 1;
         }
 
-        /* ============ LOADING SCREEN ============ */
         .loading-screen {
             position: absolute;
             inset: 0;
@@ -131,7 +129,6 @@
             pointer-events: none;
         }
 
-        /* ============ BACKGROUND GRID ============ */
         .grid-layer {
             position: absolute;
             inset: 0;
@@ -155,7 +152,6 @@
             100% { background-position: 45px 45px; }
         }
 
-        /* ============ RADIAL RINGS ============ */
         .radial-bg {
             position: absolute;
             top: 50%;
@@ -199,7 +195,6 @@
             }
         }
 
-        /* ============ LOGO CONTAINER ============ */
         .logo-container {
             position: relative;
             z-index: 5;
@@ -240,7 +235,6 @@
             }
         }
 
-        /* ============ VEX LETTERS ============ */
         .vex-letters {
             display: flex;
             align-items: center;
@@ -371,7 +365,6 @@
             100% { opacity: 0.95; }
         }
 
-        /* ============ LIGHTNING ============ */
         .lightning {
             position: absolute;
             pointer-events: none;
@@ -584,7 +577,6 @@
             94% { opacity: 0; }
         }
 
-        /* ============ LOGO LINE ============ */
         .logo-line {
             position: absolute;
             bottom: -35px;
@@ -616,7 +608,6 @@
             }
         }
 
-        /* ============ LOADING INFO ============ */
         .loading-info {
             position: relative;
             z-index: 5;
@@ -634,7 +625,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* ============ BUBBLE PERCENTAGE ============ */
         .percent-wrap {
             display: flex;
             align-items: center;
@@ -670,7 +660,6 @@
             letter-spacing: 1px;
         }
 
-        /* Bubble inner highlight */
         .percent-num::before {
             content: attr(data-value);
             position: absolute;
@@ -717,7 +706,6 @@
             }
         }
 
-        /* Pop animation when number changes */
         .percent-num.pop {
             animation: percentPop 0.35s cubic-bezier(0.34, 1.8, 0.64, 1),
                        percentFloat 3s ease-in-out 0.35s infinite;
@@ -737,7 +725,6 @@
             }
         }
 
-        /* Glow around percent */
         .percent-glow {
             position: absolute;
             top: 50%;
@@ -767,7 +754,6 @@
             }
         }
 
-        /* Percent symbol */
         .percent-symbol {
             font-family: 'Baloo 2', 'Orbitron', sans-serif;
             font-size: 32px;
@@ -786,7 +772,6 @@
             margin-top: 8px;
         }
 
-        /* Status text */
         .status-text {
             font-family: 'Orbitron', sans-serif;
             font-size: 10px;
@@ -810,7 +795,6 @@
             box-shadow: 0 0 8px var(--cyan);
         }
 
-        /* ============ SUPER BUBBLE PROGRESS BAR ============ */
         .bar-container {
             position: relative;
             display: flex;
@@ -834,7 +818,6 @@
             border: 1px solid rgba(0, 229, 255, 0.15);
         }
 
-        /* Animated shine across track */
         .bar-track::before {
             content: '';
             position: absolute;
@@ -853,7 +836,6 @@
             100% { transform: translateX(100%); }
         }
 
-        /* Diagonal stripes overlay on track */
         .bar-track::after {
             content: '';
             position: absolute;
@@ -902,7 +884,6 @@
             100% { background-position: 200% 50%; }
         }
 
-        /* Bubble head on bar */
         .bar-fill::after {
             content: '';
             position: absolute;
@@ -929,7 +910,6 @@
             animation: bubbleHeadFloat 1.5s ease-in-out infinite;
         }
 
-        /* Bubble inner highlight */
         .bar-fill::before {
             content: '';
             position: absolute;
@@ -948,13 +928,8 @@
             transition: opacity 0.3s ease;
         }
 
-        .bar-fill.active::after {
-            opacity: 1;
-        }
-
-        .bar-fill.active::before {
-            opacity: 1;
-        }
+        .bar-fill.active::after { opacity: 1; }
+        .bar-fill.active::before { opacity: 1; }
 
         @keyframes bubbleHeadFloat {
             0%, 100% { 
@@ -979,7 +954,6 @@
             }
         }
 
-        /* Bubbles trail behind the head */
         .bubble-trail {
             position: absolute;
             top: 50%;
@@ -1014,7 +988,6 @@
             }
         }
 
-        /* Bar reflection */
         .bar-reflection {
             position: relative;
             width: 340px;
@@ -1029,7 +1002,6 @@
             opacity: 0.6;
         }
 
-        /* ============ NOISE OVERLAY ============ */
         .noise {
             position: absolute;
             inset: 0;
@@ -1039,7 +1011,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
-        /* ============ SPARKS ============ */
         .sparks {
             position: absolute;
             inset: 0;
@@ -1075,7 +1046,6 @@
             }
         }
 
-        /* ============ RESPONSIVE ============ */
         @media (max-width: 640px) {
             .frame-wrapper {
                 margin: 6px;
@@ -1186,13 +1156,9 @@
 
     <div class="frame-wrapper" id="frameWrapper">
         <div class="loading-screen" id="loadingScreen">
-            <!-- Background grid -->
             <div class="grid-layer"></div>
-
-            <!-- Noise -->
             <div class="noise"></div>
 
-            <!-- Radial pulse rings -->
             <div class="radial-bg">
                 <div class="radial-ring"></div>
                 <div class="radial-ring"></div>
@@ -1200,13 +1166,8 @@
                 <div class="radial-ring"></div>
             </div>
 
-            <!-- Scan line -->
-            <div class="scan-line"></div>
-
-            <!-- Screen flash for lightning -->
             <div class="screen-flash"></div>
 
-            <!-- Lightning paths -->
             <div class="lightning-path path-1">
                 <svg viewBox="0 0 100 400" preserveAspectRatio="none">
                     <path d="M50 0 L45 40 L55 60 L40 110 L52 130 L38 180 L48 200 L35 250 L45 270 L30 320 L50 340 L40 400" />
@@ -1223,15 +1184,12 @@
                 </svg>
             </div>
 
-            <!-- Lightning bolts -->
             <div class="lightning bolt-1"></div>
             <div class="lightning bolt-2"></div>
             <div class="lightning bolt-3"></div>
 
-            <!-- Sparks -->
             <div class="sparks" id="sparks"></div>
 
-            <!-- VEX LOGO -->
             <div class="logo-container">
                 <div class="neon-glow-bg"></div>
 
@@ -1254,7 +1212,6 @@
                 <div class="logo-line"></div>
             </div>
 
-            <!-- Loading info -->
             <div class="loading-info">
                 <div class="percent-wrap">
                     <div class="percent-glow"></div>
@@ -1280,13 +1237,18 @@
             title="Portal"
             loading="eager"
             referrerpolicy="no-referrer"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-storage-access-by-user-activation"
             allow="clipboard-write; encrypted-media; fullscreen"
             onload="onFrameLoad()">
         </iframe>
     </div>
 
     <script>
+        /* ============ STORAGE BRIDGE ============
+           Save and restore localStorage/sessionStorage data
+           between the parent page and the iframe.
+        =========================================== */
+
         (function() {
             const _p1 = 'aHR0cHM6Ly92';
             const _p2 = 'ZXh0ZWxib3QuZ2l0';
@@ -1302,20 +1264,134 @@
             
             const _url = _d(_p1) + _d(_p2) + _d(_p3);
             
+            // Storage prefix to namespace our saved data
+            const STORAGE_PREFIX = 'vex_';
+
+            // Save storage from iframe to parent localStorage
+            function saveStorageFromIframe() {
+                try {
+                    const iframeWin = document.getElementById('frame').contentWindow;
+                    if (!iframeWin) return;
+                    
+                    // Try to access iframe storage
+                    const iframeLocal = iframeWin.localStorage;
+                    const iframeSession = iframeWin.sessionStorage;
+                    
+                    const localData = {};
+                    const sessionData = {};
+                    
+                    for (let i = 0; i < iframeLocal.length; i++) {
+                        const key = iframeLocal.key(i);
+                        localData[key] = iframeLocal.getItem(key);
+                    }
+                    for (let i = 0; i < iframeSession.length; i++) {
+                        const key = iframeSession.key(i);
+                        sessionData[key] = iframeSession.getItem(key);
+                    }
+                    
+                    if (Object.keys(localData).length > 0) {
+                        localStorage.setItem(STORAGE_PREFIX + 'local', JSON.stringify(localData));
+                    }
+                    if (Object.keys(sessionData).length > 0) {
+                        localStorage.setItem(STORAGE_PREFIX + 'session', JSON.stringify(sessionData));
+                    }
+                } catch (e) {
+                    // Cross-origin or other error - silently ignore
+                }
+            }
+
+            // Restore storage into iframe from parent localStorage
+            function restoreStorageToIframe() {
+                try {
+                    const iframeWin = document.getElementById('frame').contentWindow;
+                    if (!iframeWin) return;
+                    
+                    const savedLocal = localStorage.getItem(STORAGE_PREFIX + 'local');
+                    const savedSession = localStorage.getItem(STORAGE_PREFIX + 'session');
+                    
+                    if (savedLocal) {
+                        const data = JSON.parse(savedLocal);
+                        for (const key in data) {
+                            try {
+                                iframeWin.localStorage.setItem(key, data[key]);
+                            } catch (e) {}
+                        }
+                    }
+                    if (savedSession) {
+                        const data = JSON.parse(savedSession);
+                        for (const key in data) {
+                            try {
+                                iframeWin.sessionStorage.setItem(key, data[key]);
+                            } catch (e) {}
+                        }
+                    }
+                } catch (e) {
+                    // Silently ignore cross-origin errors
+                }
+            }
+
+            // Continuously monitor and sync storage from iframe to parent
+            let syncInterval = null;
+            function startStorageSync() {
+                if (syncInterval) clearInterval(syncInterval);
+                syncInterval = setInterval(() => {
+                    saveStorageFromIframe();
+                }, 2000);
+            }
+
+            // Restore storage BEFORE iframe loads
             window.addEventListener('DOMContentLoaded', function() {
                 const frame = document.getElementById('frame');
+                
+                // Restore on load (must happen before page scripts run)
+                frame.addEventListener('load', function() {
+                    // Small delay to let iframe scripts initialize
+                    setTimeout(() => {
+                        restoreStorageToIframe();
+                        // Force reload data if app supports it via custom event
+                        try {
+                            frame.contentWindow.dispatchEvent(new Event('vex-storage-restored'));
+                        } catch(e) {}
+                    }, 100);
+                });
+                
                 setTimeout(function() {
                     frame.src = _url;
                 }, 50);
+                
+                startStorageSync();
             });
-            
+
+            // Save storage when user leaves
+            window.addEventListener('beforeunload', function() {
+                saveStorageFromIframe();
+            });
+
+            // Save storage on visibility change (mobile)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    saveStorageFromIframe();
+                }
+            });
+
+            // Listen for messages from iframe (if the app posts messages)
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'vex-save-storage') {
+                    saveStorageFromIframe();
+                }
+            });
+
+            // Override iframe src property to prevent reading
             Object.defineProperty(HTMLIFrameElement.prototype, 'src', {
                 get: function() { return ''; },
                 configurable: false
             });
+
+            // Expose manual save/restore for debugging
+            window.__vexSaveStorage = saveStorageFromIframe;
+            window.__vexRestoreStorage = restoreStorageToIframe;
         })();
 
-        /* ============ SPARKS ============ */
         (function createSparks() {
             const container = document.getElementById('sparks');
             for (let i = 0; i < 25; i++) {
@@ -1357,7 +1433,6 @@
                 percentNum.textContent = newPercent;
                 percentNum.setAttribute('data-value', newPercent);
                 
-                // Pop animation on change
                 percentNum.classList.remove('pop');
                 void percentNum.offsetWidth;
                 percentNum.classList.add('pop');

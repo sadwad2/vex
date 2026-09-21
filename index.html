@@ -7,7 +7,7 @@
     <title>VEX</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Orbitron:wght@400;500;700;900&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-0: #000000;
@@ -17,7 +17,6 @@
             --cyan-dim: #00b8cc;
             --cyan-deep: #0088a0;
             --cyan-glow: rgba(0, 229, 255, 0.7);
-            --cyan-soft: rgba(0, 229, 255, 0.15);
             --white: #ffffff;
             --white-dim: #b8e8f0;
         }
@@ -31,18 +30,14 @@
             -ms-overflow-style: none;
         }
 
-        *::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
-        }
+        *::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
         html, body {
             height: 100%;
             width: 100%;
             overflow: hidden;
             background: var(--bg-0);
-            font-family: 'Baloo 2', 'Orbitron', sans-serif;
+            font-family: 'Vazirmatn', 'Baloo 2', sans-serif;
         }
 
         body {
@@ -50,10 +45,10 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            isolation: isolate;
         }
 
-        .frame-wrapper {
+        /* ============ MAIN CONTAINER ============ */
+        .main-container {
             flex: 1;
             position: relative;
             margin: 8px;
@@ -69,7 +64,7 @@
             min-height: 0;
         }
 
-        .frame-wrapper::before {
+        .main-container::before {
             content: '';
             position: absolute;
             inset: -1px;
@@ -80,31 +75,14 @@
                 transparent 40%, 
                 transparent 60%, 
                 rgba(0, 229, 255, 0.6));
-            -webkit-mask: 
-                linear-gradient(#fff 0 0) content-box, 
-                linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
             z-index: 2;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-            background: #fff;
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.8s ease 0.3s;
-        }
-
-        iframe.ready {
-            opacity: 1;
-        }
-
+        /* ============ LOADING SCREEN ============ */
         .loading-screen {
             position: absolute;
             inset: 0;
@@ -142,15 +120,8 @@
             animation: gridFadeIn 1s ease 0.2s forwards, gridMove 20s linear 0.2s infinite;
         }
 
-        @keyframes gridFadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 45px 45px; }
-        }
+        @keyframes gridFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 45px 45px; } }
 
         .radial-bg {
             position: absolute;
@@ -180,19 +151,9 @@
         .radial-ring:nth-child(4) { animation-delay: 3s; }
 
         @keyframes radialPulse {
-            0% {
-                width: 80px;
-                height: 80px;
-                opacity: 0;
-                border-width: 2px;
-            }
+            0% { width: 80px; height: 80px; opacity: 0; border-width: 2px; }
             20% { opacity: 0.9; }
-            100% {
-                width: 700px;
-                height: 700px;
-                opacity: 0;
-                border-width: 0.5px;
-            }
+            100% { width: 700px; height: 700px; opacity: 0; border-width: 0.5px; }
         }
 
         .logo-container {
@@ -225,14 +186,8 @@
         }
 
         @keyframes glowPulse {
-            0%, 100% { 
-                opacity: 0.6; 
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% { 
-                opacity: 1; 
-                transform: translate(-50%, -50%) scale(1.15);
-            }
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
         }
 
         .vex-letters {
@@ -263,78 +218,35 @@
             -webkit-text-fill-color: transparent;
             opacity: 0;
             transform: translateY(80px) scale(0.3);
-            filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.6));
         }
 
-        .letter.v {
-            animation: bubbleIn 1.4s cubic-bezier(0.34, 1.8, 0.64, 1) 0.3s forwards,
-                       bubbleFloat 3s ease-in-out 1.7s infinite;
-        }
-        .letter.e {
-            animation: bubbleIn 1.4s cubic-bezier(0.34, 1.8, 0.64, 1) 0.7s forwards,
-                       bubbleFloat 3.2s ease-in-out 2.1s infinite;
-        }
-        .letter.x {
-            animation: bubbleIn 1.4s cubic-bezier(0.34, 1.8, 0.64, 1) 1.1s forwards,
-                       bubbleFloat 2.8s ease-in-out 2.5s infinite;
-        }
+        .letter.v { animation: bubbleIn 1.4s cubic-bezier(0.34, 1.8, 0.64, 1) 0.3s forwards, bubbleFloat 3s ease-in-out 1.7s infinite; }
+        .letter.e { animation: bubbleIn 1.4s cubic-bezier(0.34, 1.8, 0.64, 1) 0.7s forwards, bubbleFloat 3.2s ease-in-out 2.1s infinite; }
+        .letter.x { animation: bubbleIn 1.4s cubic-bezier(0.34, 1.8, 0.64, 1) 1.1s forwards, bubbleFloat 2.8s ease-in-out 2.5s infinite; }
 
         @keyframes bubbleIn {
-            0% {
-                opacity: 0;
-                transform: translateY(80px) scale(0.3);
-                filter: blur(15px) drop-shadow(0 0 0px transparent);
-            }
-            40% {
-                opacity: 1;
-                filter: blur(0px) drop-shadow(0 0 30px rgba(0, 229, 255, 0.9));
-            }
-            60% {
-                transform: translateY(-15px) scale(1.15);
-                filter: blur(0px) drop-shadow(0 0 40px rgba(0, 229, 255, 1));
-            }
-            80% {
-                transform: translateY(5px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                filter: blur(0px) drop-shadow(0 0 20px rgba(0, 229, 255, 0.7));
-            }
+            0% { opacity: 0; transform: translateY(80px) scale(0.3); filter: blur(15px); }
+            40% { opacity: 1; filter: blur(0px) drop-shadow(0 0 30px rgba(0, 229, 255, 0.9)); }
+            60% { transform: translateY(-15px) scale(1.15); filter: blur(0px) drop-shadow(0 0 40px rgba(0, 229, 255, 1)); }
+            80% { transform: translateY(5px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px) drop-shadow(0 0 20px rgba(0, 229, 255, 0.7)); }
         }
 
         @keyframes bubbleFloat {
-            0%, 100% { 
-                transform: translateY(0) scale(1) rotate(0deg);
-                filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.7));
-            }
-            25% { 
-                transform: translateY(-8px) scale(1.03) rotate(-1deg);
-                filter: drop-shadow(0 0 30px rgba(0, 229, 255, 0.9));
-            }
-            50% { 
-                transform: translateY(-3px) scale(1.05) rotate(1deg);
-                filter: drop-shadow(0 0 35px rgba(0, 229, 255, 1));
-            }
-            75% { 
-                transform: translateY(-10px) scale(1.02) rotate(-0.5deg);
-                filter: drop-shadow(0 0 28px rgba(0, 229, 255, 0.85));
-            }
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.7)); }
+            25% { transform: translateY(-8px) scale(1.03) rotate(-1deg); filter: drop-shadow(0 0 30px rgba(0, 229, 255, 0.9)); }
+            50% { transform: translateY(-3px) scale(1.05) rotate(1deg); filter: drop-shadow(0 0 35px rgba(0, 229, 255, 1)); }
+            75% { transform: translateY(-10px) scale(1.02) rotate(-0.5deg); filter: drop-shadow(0 0 28px rgba(0, 229, 255, 0.85)); }
         }
 
         .letter::before {
             content: attr(data-letter);
             position: absolute;
-            top: 5%;
-            left: 20%;
-            right: 20%;
+            top: 5%; left: 20%; right: 20%;
             font-family: 'Baloo 2', 'Orbitron', sans-serif;
             font-size: 150px;
             font-weight: 800;
-            background: linear-gradient(180deg, 
-                rgba(255, 255, 255, 0.9) 0%,
-                rgba(255, 255, 255, 0.3) 40%,
-                transparent 60%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 40%, transparent 60%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -346,8 +258,7 @@
         .letter::after {
             content: attr(data-letter);
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             font-family: 'Baloo 2', 'Orbitron', sans-serif;
             font-size: 150px;
             font-weight: 800;
@@ -360,10 +271,7 @@
             animation: glowFadeIn 1s ease 1.5s forwards;
         }
 
-        @keyframes glowFadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 0.95; }
-        }
+        @keyframes glowFadeIn { 0% { opacity: 0; } 100% { opacity: 0.95; } }
 
         .lightning {
             position: absolute;
@@ -375,69 +283,22 @@
         .lightning::before {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(90deg, 
-                    transparent 0%,
-                    transparent 45%,
-                    var(--cyan) 48%,
-                    #ffffff 50%,
-                    var(--cyan) 52%,
-                    transparent 55%,
-                    transparent 100%);
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, transparent 45%, var(--cyan) 48%, #ffffff 50%, var(--cyan) 52%, transparent 55%, transparent 100%);
             filter: blur(1px);
         }
 
-        .bolt-1 {
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 300px;
-            animation: lightningStrike 3s ease-in-out infinite;
-            animation-delay: 2s;
-        }
-
-        .bolt-2 {
-            top: 20%;
-            left: 20%;
-            width: 200px;
-            height: 250px;
-            animation: lightningStrike 4s ease-in-out infinite;
-            animation-delay: 3.5s;
-            transform: rotate(-30deg);
-        }
-
-        .bolt-3 {
-            top: 15%;
-            right: 20%;
-            width: 200px;
-            height: 250px;
-            animation: lightningStrike 3.5s ease-in-out infinite;
-            animation-delay: 5s;
-            transform: rotate(35deg);
-        }
+        .bolt-1 { top: 0; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; animation: lightningStrike 3s ease-in-out infinite; animation-delay: 2s; }
+        .bolt-2 { top: 20%; left: 20%; width: 200px; height: 250px; animation: lightningStrike 4s ease-in-out infinite; animation-delay: 3.5s; transform: rotate(-30deg); }
+        .bolt-3 { top: 15%; right: 20%; width: 200px; height: 250px; animation: lightningStrike 3.5s ease-in-out infinite; animation-delay: 5s; transform: rotate(35deg); }
 
         @keyframes lightningStrike {
-            0%, 88%, 100% {
-                opacity: 0;
-                filter: blur(2px);
-            }
-            89% {
-                opacity: 1;
-                filter: blur(0px) brightness(2);
-            }
+            0%, 88%, 100% { opacity: 0; filter: blur(2px); }
+            89% { opacity: 1; filter: blur(0px) brightness(2); }
             90% { opacity: 0; }
-            91% {
-                opacity: 1;
-                filter: blur(0px) brightness(2.5);
-            }
+            91% { opacity: 1; filter: blur(0px) brightness(2.5); }
             92% { opacity: 0; }
-            93% {
-                opacity: 0.8;
-                filter: blur(0.5px) brightness(2);
-            }
+            93% { opacity: 0.8; filter: blur(0.5px) brightness(2); }
             94% { opacity: 0; }
         }
 
@@ -449,91 +310,36 @@
             filter: drop-shadow(0 0 8px var(--cyan)) drop-shadow(0 0 20px var(--cyan));
         }
 
-        .lightning-path svg {
-            width: 100%;
-            height: 100%;
-        }
+        .lightning-path svg { width: 100%; height: 100%; }
+        .lightning-path path { fill: none; stroke: var(--cyan); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 
-        .lightning-path path {
-            fill: none;
-            stroke: var(--cyan);
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            filter: drop-shadow(0 0 6px var(--cyan));
-        }
-
-        .path-1 {
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 400px;
-            animation: pathStrike 4s ease-in-out infinite 2.5s;
-        }
-
-        .path-2 {
-            top: 50px;
-            left: -30px;
-            width: 150px;
-            height: 300px;
-            transform: rotate(-25deg);
-            animation: pathStrike 5s ease-in-out infinite 4s;
-        }
-
-        .path-3 {
-            top: 30px;
-            right: -30px;
-            width: 150px;
-            height: 300px;
-            transform: rotate(25deg);
-            animation: pathStrike 4.5s ease-in-out infinite 5.5s;
-        }
+        .path-1 { top: -50px; left: 50%; transform: translateX(-50%); width: 180px; height: 400px; animation: pathStrike 4s ease-in-out infinite 2.5s; }
+        .path-2 { top: 50px; left: -30px; width: 150px; height: 300px; transform: rotate(-25deg); animation: pathStrike 5s ease-in-out infinite 4s; --base-transform: rotate(-25deg); }
+        .path-3 { top: 30px; right: -30px; width: 150px; height: 300px; transform: rotate(25deg); animation: pathStrike 4.5s ease-in-out infinite 5.5s; --base-transform: rotate(25deg); }
 
         @keyframes pathStrike {
-            0%, 90%, 100% {
-                opacity: 0;
-                transform: var(--base-transform, translateX(-50%)) scaleY(0.8);
-            }
-            91% {
-                opacity: 1;
-                transform: var(--base-transform, translateX(-50%)) scaleY(1);
-            }
-            92% {
-                opacity: 0.3;
-                transform: var(--base-transform, translateX(-50%)) scaleY(1.05);
-            }
-            93% {
-                opacity: 1;
-                transform: var(--base-transform, translateX(-50%)) scaleY(1);
-            }
+            0%, 90%, 100% { opacity: 0; transform: var(--base-transform, translateX(-50%)) scaleY(0.8); }
+            91% { opacity: 1; transform: var(--base-transform, translateX(-50%)) scaleY(1); }
+            92% { opacity: 0.3; transform: var(--base-transform, translateX(-50%)) scaleY(1.05); }
+            93% { opacity: 1; transform: var(--base-transform, translateX(-50%)) scaleY(1); }
             94% { opacity: 0; }
         }
 
-        .path-2 { --base-transform: rotate(-25deg); }
-        .path-3 { --base-transform: rotate(25deg); }
-
         .arc-container {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 8;
         }
 
         .arc {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 4px; height: 4px;
             background: #ffffff;
             border-radius: 50%;
-            box-shadow: 
-                0 0 10px #ffffff,
-                0 0 20px var(--cyan),
-                0 0 35px var(--cyan);
+            box-shadow: 0 0 10px #ffffff, 0 0 20px var(--cyan), 0 0 35px var(--cyan);
             opacity: 0;
             animation: arcFlash 2s ease-in-out infinite;
         }
@@ -557,14 +363,11 @@
         .screen-flash {
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at center, 
-                rgba(0, 229, 255, 0.4) 0%,
-                transparent 60%);
+            background: radial-gradient(ellipse at center, rgba(0, 229, 255, 0.4) 0%, transparent 60%);
             pointer-events: none;
             z-index: 15;
             opacity: 0;
-            animation: screenFlash 5s ease-in-out infinite;
-            animation-delay: 2s;
+            animation: screenFlash 5s ease-in-out infinite 2s;
         }
 
         @keyframes screenFlash {
@@ -584,28 +387,14 @@
             transform: translateX(-50%) scaleX(0);
             width: 340px;
             height: 2px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--cyan), 
-                #ffffff,
-                var(--cyan),
-                transparent);
-            box-shadow: 
-                0 0 15px var(--cyan),
-                0 0 30px var(--cyan),
-                0 0 60px var(--cyan);
+            background: linear-gradient(90deg, transparent, var(--cyan), #ffffff, var(--cyan), transparent);
+            box-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan), 0 0 60px var(--cyan);
             animation: lineExpand 1.5s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
         }
 
         @keyframes lineExpand {
-            0% { 
-                transform: translateX(-50%) scaleX(0); 
-                opacity: 0;
-            }
-            100% { 
-                transform: translateX(-50%) scaleX(1); 
-                opacity: 1;
-            }
+            0% { transform: translateX(-50%) scaleX(0); opacity: 0; }
+            100% { transform: translateX(-50%) scaleX(1); opacity: 1; }
         }
 
         .loading-info {
@@ -632,7 +421,6 @@
             gap: 6px;
             direction: ltr;
             position: relative;
-            perspective: 800px;
         }
 
         .percent-num {
@@ -640,134 +428,34 @@
             font-size: 76px;
             font-weight: 800;
             line-height: 1;
-            position: relative;
-            display: inline-block;
-            background: linear-gradient(180deg, 
-                #ffffff 0%, 
-                #e0faff 20%,
-                #4df0ff 50%,
-                #00e5ff 80%,
-                #00b8cc 100%);
+            background: linear-gradient(180deg, #ffffff 0%, #e0faff 20%, #4df0ff 50%, #00e5ff 80%, #00b8cc 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             font-variant-numeric: tabular-nums;
             min-width: 130px;
             text-align: right;
-            filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.7))
-                    drop-shadow(0 0 30px rgba(0, 229, 255, 0.4));
+            filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.7)) drop-shadow(0 0 30px rgba(0, 229, 255, 0.4));
             animation: percentFloat 3s ease-in-out infinite;
             letter-spacing: 1px;
         }
 
-        .percent-num::before {
-            content: attr(data-value);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            font-family: 'Baloo 2', 'Orbitron', sans-serif;
-            font-size: 76px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-align: right;
-            background: linear-gradient(180deg, 
-                rgba(255, 255, 255, 0.95) 0%,
-                rgba(255, 255, 255, 0.4) 25%,
-                transparent 50%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            pointer-events: none;
-            filter: blur(0.8px);
-        }
-
         @keyframes percentFloat {
-            0%, 100% { 
-                transform: translateY(0) scale(1) rotate(0deg);
-                filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.7))
-                        drop-shadow(0 0 30px rgba(0, 229, 255, 0.4));
-            }
-            25% { 
-                transform: translateY(-5px) scale(1.03) rotate(-0.5deg);
-                filter: drop-shadow(0 0 22px rgba(0, 229, 255, 0.9))
-                        drop-shadow(0 0 45px rgba(0, 229, 255, 0.6));
-            }
-            50% { 
-                transform: translateY(-2px) scale(1.05) rotate(0.5deg);
-                filter: drop-shadow(0 0 28px rgba(0, 229, 255, 1))
-                        drop-shadow(0 0 55px rgba(0, 229, 255, 0.7));
-            }
-            75% { 
-                transform: translateY(-7px) scale(1.02) rotate(-0.3deg);
-                filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.85))
-                        drop-shadow(0 0 40px rgba(0, 229, 255, 0.5));
-            }
-        }
-
-        .percent-num.pop {
-            animation: percentPop 0.35s cubic-bezier(0.34, 1.8, 0.64, 1),
-                       percentFloat 3s ease-in-out 0.35s infinite;
-        }
-
-        @keyframes percentPop {
-            0% { 
-                transform: scale(1.35) rotate(-3deg);
-                filter: drop-shadow(0 0 35px rgba(0, 229, 255, 1))
-                        drop-shadow(0 0 70px rgba(0, 229, 255, 0.8));
-            }
-            50% { 
-                transform: scale(0.92) rotate(2deg);
-            }
-            100% { 
-                transform: scale(1) rotate(0deg);
-            }
-        }
-
-        .percent-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 220px;
-            height: 120px;
-            border-radius: 50%;
-            background: radial-gradient(ellipse at center, 
-                rgba(0, 229, 255, 0.35) 0%,
-                rgba(0, 229, 255, 0.15) 40%,
-                transparent 70%);
-            filter: blur(25px);
-            z-index: -1;
-            pointer-events: none;
-            animation: percentGlowPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes percentGlowPulse {
-            0%, 100% { 
-                opacity: 0.7; 
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% { 
-                opacity: 1; 
-                transform: translate(-50%, -50%) scale(1.2);
-            }
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-5px) scale(1.03); }
+            50% { transform: translateY(-2px) scale(1.05); }
+            75% { transform: translateY(-7px) scale(1.02); }
         }
 
         .percent-symbol {
             font-family: 'Baloo 2', 'Orbitron', sans-serif;
             font-size: 32px;
             font-weight: 700;
-            background: linear-gradient(180deg, 
-                #ffffff 0%,
-                #4df0ff 50%,
-                #00e5ff 100%);
+            background: linear-gradient(180deg, #ffffff 0%, #4df0ff 50%, #00e5ff 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.9))
-                    drop-shadow(0 0 25px rgba(0, 229, 255, 0.5));
-            animation: percentFloat 3.2s ease-in-out 0.3s infinite;
+            filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.9));
             align-self: flex-start;
             margin-top: 8px;
         }
@@ -782,7 +470,6 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            height: 16px;
             direction: ltr;
         }
 
@@ -795,14 +482,6 @@
             box-shadow: 0 0 8px var(--cyan);
         }
 
-        .bar-container {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
         .bar-track {
             width: 340px;
             max-width: 80vw;
@@ -811,72 +490,19 @@
             border-radius: 20px;
             overflow: hidden;
             position: relative;
-            box-shadow: 
-                inset 0 0 12px rgba(0, 0, 0, 0.9),
-                inset 0 0 20px rgba(0, 229, 255, 0.15),
-                0 0 25px rgba(0, 229, 255, 0.15);
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 229, 255, 0.15), 0 0 25px rgba(0, 229, 255, 0.15);
             border: 1px solid rgba(0, 229, 255, 0.15);
-        }
-
-        .bar-track::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, 
-                transparent,
-                rgba(0, 229, 255, 0.15),
-                transparent);
-            animation: trackShine 3s linear infinite;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        @keyframes trackShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .bar-track::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 8px,
-                rgba(0, 229, 255, 0.05) 8px,
-                rgba(0, 229, 255, 0.05) 16px
-            );
-            animation: stripesMove 1s linear infinite;
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0.5;
-        }
-
-        @keyframes stripesMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 32px 0; }
         }
 
         .bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, 
-                var(--cyan-deep), 
-                var(--cyan), 
-                #ffffff,
-                var(--cyan));
+            background: linear-gradient(90deg, var(--cyan-deep), var(--cyan), #ffffff, var(--cyan));
             background-size: 200% 100%;
             border-radius: 20px;
-            box-shadow: 
-                0 0 15px var(--cyan),
-                0 0 35px var(--cyan-glow),
-                0 0 60px var(--cyan-glow);
+            box-shadow: 0 0 15px var(--cyan), 0 0 35px var(--cyan-glow), 0 0 60px var(--cyan-glow);
             transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             animation: barFlow 2s linear infinite;
-            position: relative;
-            z-index: 1;
-            overflow: visible;
         }
 
         @keyframes barFlow {
@@ -884,269 +510,433 @@
             100% { background-position: 200% 50%; }
         }
 
-        .bar-fill::after {
-            content: '';
+        /* ============ UPDATE SCREEN ============ */
+        .update-screen {
             position: absolute;
-            right: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 30%,
-                #ffffff 0%,
-                #a8f5ff 30%,
-                var(--cyan) 60%,
-                var(--cyan-dim) 100%);
-            box-shadow: 
-                0 0 20px #ffffff,
-                0 0 35px var(--cyan),
-                0 0 55px var(--cyan),
-                0 0 80px var(--cyan-glow),
-                inset -3px -3px 8px rgba(0, 0, 0, 0.3),
-                inset 3px 3px 8px rgba(255, 255, 255, 0.5);
+            inset: 0;
+            z-index: 9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            background: 
+                radial-gradient(ellipse at center, rgba(0, 229, 255, 0.1), transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(0, 229, 255, 0.06), transparent 50%),
+                radial-gradient(ellipse at 0% 0%, rgba(0, 229, 255, 0.06), transparent 50%),
+                #000000;
             opacity: 0;
-            transition: opacity 0.3s ease;
-            animation: bubbleHeadFloat 1.5s ease-in-out infinite;
+            visibility: hidden;
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), visibility 1s;
+            overflow: hidden;
+            direction: rtl;
+            font-family: 'Vazirmatn', sans-serif;
         }
 
-        .bar-fill::before {
-            content: '';
-            position: absolute;
-            right: 2px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, 
-                rgba(255, 255, 255, 0.95), 
-                transparent 70%);
-            filter: blur(0.5px);
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .update-screen.show {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .bar-fill.active::after { opacity: 1; }
-        .bar-fill.active::before { opacity: 1; }
-
-        @keyframes bubbleHeadFloat {
-            0%, 100% { 
-                transform: translateY(-50%) scale(1);
-                box-shadow: 
-                    0 0 20px #ffffff,
-                    0 0 35px var(--cyan),
-                    0 0 55px var(--cyan),
-                    0 0 80px var(--cyan-glow),
-                    inset -3px -3px 8px rgba(0, 0, 0, 0.3),
-                    inset 3px 3px 8px rgba(255, 255, 255, 0.5);
-            }
-            50% { 
-                transform: translateY(-50%) scale(1.2);
-                box-shadow: 
-                    0 0 30px #ffffff,
-                    0 0 50px var(--cyan),
-                    0 0 80px var(--cyan),
-                    0 0 120px var(--cyan-glow),
-                    inset -3px -3px 8px rgba(0, 0, 0, 0.3),
-                    inset 3px 3px 8px rgba(255, 255, 255, 0.5);
-            }
-        }
-
-        .bubble-trail {
+        .update-grid {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%,
-                #ffffff,
-                var(--cyan) 60%,
-                transparent);
-            box-shadow: 
-                0 0 8px var(--cyan),
-                0 0 15px var(--cyan);
-            opacity: 0;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.06) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 10%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 10%, transparent 80%);
+            animation: gridMove 25s linear infinite;
             pointer-events: none;
             z-index: 1;
         }
 
-        .bar-fill.active .bubble-trail {
-            animation: trailFade 1.2s ease-in-out infinite;
-        }
-
-        @keyframes trailFade {
-            0% { 
-                opacity: 0.9; 
-                transform: translateY(-50%) scale(1);
-            }
-            100% { 
-                opacity: 0; 
-                transform: translateY(-50%) scale(0.3) translateX(-15px);
-            }
-        }
-
-        .bar-reflection {
+        .update-content {
             position: relative;
-            width: 340px;
-            max-width: 80vw;
-            height: 6px;
-            background: linear-gradient(180deg,
-                rgba(0, 229, 255, 0.15),
-                transparent);
-            border-radius: 0 0 20px 20px;
-            filter: blur(3px);
-            margin-top: -3px;
-            opacity: 0.6;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            gap: 26px;
         }
 
-        .noise {
-            position: absolute;
-            inset: 0;
-            z-index: 3;
-            opacity: 0.04;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        .warn-icon-wrap {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
         }
 
-        .sparks {
+        .warn-glow {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(0, 229, 255, 0.4) 0%, rgba(0, 229, 255, 0.15) 40%, transparent 70%);
+            filter: blur(25px);
+            animation: warnGlowPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes warnGlowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .warn-rings {
             position: absolute;
             inset: 0;
             pointer-events: none;
-            z-index: 7;
+        }
+
+        .warn-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1.5px solid var(--cyan);
+            opacity: 0;
+            animation: warnRingExpand 3s ease-out infinite;
+        }
+
+        .warn-ring:nth-child(1) { animation-delay: 0s; }
+        .warn-ring:nth-child(2) { animation-delay: 1s; }
+        .warn-ring:nth-child(3) { animation-delay: 2s; }
+
+        @keyframes warnRingExpand {
+            0% { width: 100px; height: 100px; opacity: 0.9; border-width: 2px; }
+            100% { width: 260px; height: 260px; opacity: 0; border-width: 0.5px; }
+        }
+
+        .warn-icon {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(0, 229, 255, 0.05));
+            border: 2px solid var(--cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.5), 0 0 50px rgba(0, 229, 255, 0.25), inset 0 0 25px rgba(0, 229, 255, 0.15);
+            animation: warnIconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes warnIconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        .warn-icon svg {
+            width: 55px;
+            height: 55px;
+            color: var(--cyan);
+            filter: drop-shadow(0 0 15px var(--cyan-glow));
+            animation: warnIconSpin 6s linear infinite;
+        }
+
+        @keyframes warnIconSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .update-title {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.3;
+            background: linear-gradient(180deg, #ffffff 0%, #e0faff 30%, #4df0ff 70%, #00e5ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.6));
+        }
+
+        .update-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .update-divider::before,
+        .update-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent);
+            box-shadow: 0 0 8px var(--cyan);
+        }
+
+        .update-divider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.6; }
+        }
+
+        .update-description {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 2;
+            color: var(--white-dim);
+            max-width: 480px;
+            padding: 0 10px;
+        }
+
+        .update-description strong {
+            color: var(--cyan);
+            font-weight: 700;
+            text-shadow: 0 0 12px var(--cyan-glow);
+        }
+
+        .update-description .highlight {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            border-radius: 6px;
+            color: var(--cyan-bright);
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0 4px;
+        }
+
+        .status-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 229, 255, 0.06);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--white-dim);
+        }
+
+        .chip-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan);
+            animation: chipDotPulse 1.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .chip:nth-child(2) .chip-dot { animation-delay: 0.3s; }
+        .chip:nth-child(3) .chip-dot { animation-delay: 0.6s; }
+
+        @keyframes chipDotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px 44px;
+            margin-top: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #001318;
+            background: linear-gradient(135deg, var(--cyan-bright) 0%, var(--cyan) 50%, var(--cyan-dim) 100%);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            overflow: hidden;
+            text-decoration: none;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5), 0 0 60px rgba(0, 229, 255, 0.25), 0 10px 40px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: ctaGlow 2.5s ease-in-out infinite;
+        }
+
+        @keyframes ctaGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(0, 229, 255, 0.5), 0 0 60px rgba(0, 229, 255, 0.25), 0 10px 40px rgba(0, 0, 0, 0.6); }
+            50% { box-shadow: 0 0 45px rgba(0, 229, 255, 0.8), 0 0 90px rgba(0, 229, 255, 0.4), 0 10px 40px rgba(0, 0, 0, 0.6); }
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.9), 0 0 120px rgba(0, 229, 255, 0.5), 0 15px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        .cta-btn:active {
+            transform: translateY(-1px) scale(0.99);
+        }
+
+        .cta-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2.5;
+        }
+
+        /* URL Box */
+        .url-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 12px;
+            direction: ltr;
+            max-width: 100%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
             overflow: hidden;
         }
 
-        .spark {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: #ffffff;
-            border-radius: 50%;
-            box-shadow: 
-                0 0 8px #ffffff,
-                0 0 15px var(--cyan),
-                0 0 25px var(--cyan);
-            opacity: 0;
-            animation: sparkRise linear infinite;
+        .url-box:hover {
+            background: rgba(0, 229, 255, 0.1);
+            border-color: rgba(0, 229, 255, 0.5);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
         }
 
-        @keyframes sparkRise {
-            0% {
-                opacity: 0;
-                transform: translateY(0) scale(0.5);
-            }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% {
-                opacity: 0;
-                transform: translateY(-300px) scale(0);
-            }
+        .url-box svg {
+            width: 16px;
+            height: 16px;
+            color: var(--cyan);
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 8px var(--cyan-glow));
+        }
+
+        .url-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--cyan-bright);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+            direction: ltr;
+        }
+
+        .copy-hint {
+            font-size: 10px;
+            color: rgba(184, 232, 240, 0.6);
+            letter-spacing: 1px;
+            margin-top: -4px;
+        }
+
+        .update-footer {
+            font-size: 12px;
+            color: rgba(184, 232, 240, 0.5);
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150%);
+            padding: 14px 24px;
+            background: rgba(0, 229, 255, 0.15);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 12px;
+            color: var(--cyan-bright);
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 229, 255, 0.4);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+            direction: rtl;
+            font-family: 'Vazirmatn', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
         }
 
         @media (max-width: 640px) {
-            .frame-wrapper {
-                margin: 6px;
-                border-radius: 14px;
-            }
-
-            .letter,
-            .letter::before,
-            .letter::after {
-                font-size: 100px;
-            }
-
-            .neon-glow-bg {
-                width: 350px;
-                height: 180px;
-            }
-
-            .logo-container {
-                margin-bottom: 45px;
-            }
-
-            .logo-line {
-                width: 240px;
-                bottom: -28px;
-            }
-
-            .percent-num,
-            .percent-num::before {
-                font-size: 56px;
-                min-width: 100px;
-            }
-
-            .percent-glow {
-                width: 180px;
-                height: 90px;
-            }
-
-            .percent-symbol {
-                font-size: 24px;
-            }
-
-            .bar-track,
-            .bar-reflection {
-                width: 250px;
-                height: 7px;
-            }
-
-            .bar-fill::after {
-                width: 18px;
-                height: 18px;
-                right: -8px;
-            }
-
-            .bar-fill::before {
-                width: 6px;
-                height: 6px;
-            }
-
-            .status-text {
-                font-size: 9px;
-                letter-spacing: 5px;
-            }
-
-            .status-text::before,
-            .status-text::after {
-                width: 25px;
-            }
-
-            .radial-bg {
-                width: 400px;
-                height: 400px;
-            }
-
-            @keyframes radialPulse {
-                0% { width: 50px; height: 50px; opacity: 0; border-width: 2px; }
-                20% { opacity: 0.9; }
-                100% { width: 400px; height: 400px; opacity: 0; border-width: 0.5px; }
-            }
-
-            .bolt-1, .bolt-2, .bolt-3 { width: 150px; height: 150px; }
-            .path-1 { width: 130px; height: 280px; }
-            .path-2, .path-3 { width: 100px; height: 200px; }
+            .main-container { margin: 6px; border-radius: 14px; }
+            .letter, .letter::before, .letter::after { font-size: 100px; }
+            .neon-glow-bg { width: 350px; height: 180px; }
+            .logo-container { margin-bottom: 45px; }
+            .logo-line { width: 240px; bottom: -28px; }
+            .percent-num { font-size: 56px; min-width: 100px; }
+            .percent-symbol { font-size: 24px; }
+            .bar-track { width: 250px; height: 7px; }
+            .status-text { font-size: 9px; letter-spacing: 5px; }
+            .status-text::before, .status-text::after { width: 25px; }
+            .update-title { font-size: 26px; }
+            .update-description { font-size: 14px; line-height: 1.9; }
+            .warn-icon-wrap { width: 110px; height: 110px; }
+            .warn-icon { width: 85px; height: 85px; border-radius: 24px; }
+            .warn-icon svg { width: 45px; height: 45px; }
+            .cta-btn { padding: 16px 30px; font-size: 15px; border-radius: 14px; }
+            .cta-btn svg { width: 18px; height: 18px; }
+            .update-content { gap: 22px; }
+            .url-text { font-size: 11px; }
+            .url-box { padding: 10px 14px; }
         }
 
         @media (max-width: 380px) {
-            .letter,
-            .letter::before,
-            .letter::after {
-                font-size: 78px;
-            }
-            .percent-num,
-            .percent-num::before {
-                font-size: 44px;
-                min-width: 80px;
-            }
-            .percent-symbol {
-                font-size: 20px;
-            }
+            .letter, .letter::before, .letter::after { font-size: 78px; }
+            .percent-num { font-size: 44px; min-width: 80px; }
+            .update-title { font-size: 22px; }
+            .url-text { font-size: 10px; }
         }
 
-        .frame-wrapper {
+        .main-container {
             -webkit-user-select: none;
             user-select: none;
         }
@@ -1154,10 +944,10 @@
 </head>
 <body>
 
-    <div class="frame-wrapper" id="frameWrapper">
+    <div class="main-container">
+        <!-- ============ LOADING SCREEN ============ -->
         <div class="loading-screen" id="loadingScreen">
             <div class="grid-layer"></div>
-            <div class="noise"></div>
 
             <div class="radial-bg">
                 <div class="radial-ring"></div>
@@ -1188,8 +978,6 @@
             <div class="lightning bolt-2"></div>
             <div class="lightning bolt-3"></div>
 
-            <div class="sparks" id="sparks"></div>
-
             <div class="logo-container">
                 <div class="neon-glow-bg"></div>
 
@@ -1214,203 +1002,103 @@
 
             <div class="loading-info">
                 <div class="percent-wrap">
-                    <div class="percent-glow"></div>
-                    <span class="percent-num" id="percentNum" data-value="0">0</span>
+                    <span class="percent-num" id="percentNum">0</span>
                     <span class="percent-symbol">%</span>
                 </div>
                 <div class="status-text" id="statusText">INITIALIZING</div>
-                <div class="bar-container">
-                    <div class="bar-track">
-                        <div class="bar-fill" id="barFill">
-                            <div class="bubble-trail" style="right: 20px; animation-delay: 0.1s;"></div>
-                            <div class="bubble-trail" style="right: 30px; animation-delay: 0.3s;"></div>
-                            <div class="bubble-trail" style="right: 15px; animation-delay: 0.5s;"></div>
-                        </div>
-                    </div>
-                    <div class="bar-reflection"></div>
+                <div class="bar-track">
+                    <div class="bar-fill" id="barFill"></div>
                 </div>
             </div>
         </div>
 
-        <iframe 
-            id="frame"
-            title="Portal"
-            loading="eager"
-            referrerpolicy="no-referrer"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-storage-access-by-user-activation"
-            allow="clipboard-write; encrypted-media; fullscreen"
-            onload="onFrameLoad()">
-        </iframe>
+        <!-- ============ UPDATE SCREEN ============ -->
+        <div class="update-screen" id="updateScreen">
+            <div class="update-grid"></div>
+
+            <div class="update-content">
+                <div class="warn-icon-wrap">
+                    <div class="warn-glow"></div>
+                    <div class="warn-rings">
+                        <div class="warn-ring"></div>
+                        <div class="warn-ring"></div>
+                        <div class="warn-ring"></div>
+                    </div>
+                    <div class="warn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="update-title">در حال به‌روزرسانی هستیم</h1>
+
+                <div class="update-divider">
+                    <div class="update-divider-dot"></div>
+                </div>
+
+                <p class="update-description">
+                    تیم فنی ما در حال <strong>آپدیت سرورها</strong> و ارتقاء زیرساخت است.<br>
+                    لطفاً فعلاً <span class="highlight">روی همین وب‌سایت</span> بمانید.<br>
+                    به‌زودی <strong>نسخه نهایی</strong> با امکانات جدید منتشر می‌شود.
+                </p>
+
+                <div class="status-chips">
+                    <div class="chip">
+                        <span class="chip-dot"></span>
+                        <span>سرورها در حال آپدیت</span>
+                    </div>
+                    <div class="chip">
+                        <span class="chip-dot"></span>
+                        <span>زیرساخت جدید</span>
+                    </div>
+                    <div class="chip">
+                        <span class="chip-dot"></span>
+                        <span>به‌زودی...</span>
+                    </div>
+                </div>
+
+                <!-- URL Box -->
+                <div class="url-box" onclick="copyUrl()" title="کلیک برای کپی">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                    <span class="url-text" id="urlText">https://vextelbot.github.io/vex/</span>
+                </div>
+                <div class="copy-hint">کلیک کنید تا کپی شود</div>
+
+                <!-- CTA Button - opens in new tab -->
+                <a class="cta-btn" href="https://vextelbot.github.io/vex/" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    <span>باز کردن وب‌سایت</span>
+                </a>
+
+                <div class="update-footer">نسخه نهایی به‌زودی منتشر می‌شود</div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>لینک کپی شد!</span>
+        </div>
     </div>
 
     <script>
-        /* ============ STORAGE BRIDGE ============
-           Save and restore localStorage/sessionStorage data
-           between the parent page and the iframe.
-        =========================================== */
-
-        (function() {
-            const _p1 = 'aHR0cHM6Ly92';
-            const _p2 = 'ZXh0ZWxib3QuZ2l0';
-            const _p3 = 'aHViLmlvL3ZleC8=';
-            
-            const _d = function(s) {
-                try {
-                    return decodeURIComponent(escape(atob(s)));
-                } catch(e) {
-                    return atob(s);
-                }
-            };
-            
-            const _url = _d(_p1) + _d(_p2) + _d(_p3);
-            
-            // Storage prefix to namespace our saved data
-            const STORAGE_PREFIX = 'vex_';
-
-            // Save storage from iframe to parent localStorage
-            function saveStorageFromIframe() {
-                try {
-                    const iframeWin = document.getElementById('frame').contentWindow;
-                    if (!iframeWin) return;
-                    
-                    // Try to access iframe storage
-                    const iframeLocal = iframeWin.localStorage;
-                    const iframeSession = iframeWin.sessionStorage;
-                    
-                    const localData = {};
-                    const sessionData = {};
-                    
-                    for (let i = 0; i < iframeLocal.length; i++) {
-                        const key = iframeLocal.key(i);
-                        localData[key] = iframeLocal.getItem(key);
-                    }
-                    for (let i = 0; i < iframeSession.length; i++) {
-                        const key = iframeSession.key(i);
-                        sessionData[key] = iframeSession.getItem(key);
-                    }
-                    
-                    if (Object.keys(localData).length > 0) {
-                        localStorage.setItem(STORAGE_PREFIX + 'local', JSON.stringify(localData));
-                    }
-                    if (Object.keys(sessionData).length > 0) {
-                        localStorage.setItem(STORAGE_PREFIX + 'session', JSON.stringify(sessionData));
-                    }
-                } catch (e) {
-                    // Cross-origin or other error - silently ignore
-                }
-            }
-
-            // Restore storage into iframe from parent localStorage
-            function restoreStorageToIframe() {
-                try {
-                    const iframeWin = document.getElementById('frame').contentWindow;
-                    if (!iframeWin) return;
-                    
-                    const savedLocal = localStorage.getItem(STORAGE_PREFIX + 'local');
-                    const savedSession = localStorage.getItem(STORAGE_PREFIX + 'session');
-                    
-                    if (savedLocal) {
-                        const data = JSON.parse(savedLocal);
-                        for (const key in data) {
-                            try {
-                                iframeWin.localStorage.setItem(key, data[key]);
-                            } catch (e) {}
-                        }
-                    }
-                    if (savedSession) {
-                        const data = JSON.parse(savedSession);
-                        for (const key in data) {
-                            try {
-                                iframeWin.sessionStorage.setItem(key, data[key]);
-                            } catch (e) {}
-                        }
-                    }
-                } catch (e) {
-                    // Silently ignore cross-origin errors
-                }
-            }
-
-            // Continuously monitor and sync storage from iframe to parent
-            let syncInterval = null;
-            function startStorageSync() {
-                if (syncInterval) clearInterval(syncInterval);
-                syncInterval = setInterval(() => {
-                    saveStorageFromIframe();
-                }, 2000);
-            }
-
-            // Restore storage BEFORE iframe loads
-            window.addEventListener('DOMContentLoaded', function() {
-                const frame = document.getElementById('frame');
-                
-                // Restore on load (must happen before page scripts run)
-                frame.addEventListener('load', function() {
-                    // Small delay to let iframe scripts initialize
-                    setTimeout(() => {
-                        restoreStorageToIframe();
-                        // Force reload data if app supports it via custom event
-                        try {
-                            frame.contentWindow.dispatchEvent(new Event('vex-storage-restored'));
-                        } catch(e) {}
-                    }, 100);
-                });
-                
-                setTimeout(function() {
-                    frame.src = _url;
-                }, 50);
-                
-                startStorageSync();
-            });
-
-            // Save storage when user leaves
-            window.addEventListener('beforeunload', function() {
-                saveStorageFromIframe();
-            });
-
-            // Save storage on visibility change (mobile)
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    saveStorageFromIframe();
-                }
-            });
-
-            // Listen for messages from iframe (if the app posts messages)
-            window.addEventListener('message', function(event) {
-                if (event.data && event.data.type === 'vex-save-storage') {
-                    saveStorageFromIframe();
-                }
-            });
-
-            // Override iframe src property to prevent reading
-            Object.defineProperty(HTMLIFrameElement.prototype, 'src', {
-                get: function() { return ''; },
-                configurable: false
-            });
-
-            // Expose manual save/restore for debugging
-            window.__vexSaveStorage = saveStorageFromIframe;
-            window.__vexRestoreStorage = restoreStorageToIframe;
-        })();
-
-        (function createSparks() {
-            const container = document.getElementById('sparks');
-            for (let i = 0; i < 25; i++) {
-                const s = document.createElement('div');
-                s.className = 'spark';
-                s.style.left = Math.random() * 100 + '%';
-                s.style.bottom = '0%';
-                s.style.animationDuration = (3 + Math.random() * 4) + 's';
-                s.style.animationDelay = (1 + Math.random() * 5) + 's';
-                s.style.width = s.style.height = (2 + Math.random() * 2) + 'px';
-                container.appendChild(s);
-            }
-        })();
-
-        const frame = document.getElementById('frame');
         const loadingScreen = document.getElementById('loadingScreen');
+        const updateScreen = document.getElementById('updateScreen');
         const barFill = document.getElementById('barFill');
         const percentNum = document.getElementById('percentNum');
         const statusText = document.getElementById('statusText');
+        const toast = document.getElementById('toast');
 
         const statusMessages = [
             'INITIALIZING',
@@ -1425,18 +1113,11 @@
         let lastDisplayedPercent = 0;
 
         const MIN_LOADING_TIME = 7000;
-        const loadingStartTime = Date.now();
 
         function updatePercentDisplay(value) {
             const newPercent = Math.floor(value);
             if (newPercent !== lastDisplayedPercent) {
                 percentNum.textContent = newPercent;
-                percentNum.setAttribute('data-value', newPercent);
-                
-                percentNum.classList.remove('pop');
-                void percentNum.offsetWidth;
-                percentNum.classList.add('pop');
-                
                 lastDisplayedPercent = newPercent;
             }
         }
@@ -1451,7 +1132,6 @@
                 if (progress > 95) progress = 95;
                 
                 barFill.style.width = progress + '%';
-                barFill.classList.add('active');
                 updatePercentDisplay(progress);
                 
                 const newIndex = Math.min(
@@ -1465,7 +1145,6 @@
             }
         }, 250);
 
-        let frameLoaded = false;
         let loadingFinished = false;
 
         function finishLoading() {
@@ -1480,34 +1159,52 @@
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
                 setTimeout(() => {
-                    frame.classList.add('ready');
-                }, 200);
+                    updateScreen.classList.add('show');
+                }, 400);
             }, 1000);
         }
 
-        function tryFinish() {
-            if (!frameLoaded) return;
-            const elapsed = Date.now() - loadingStartTime;
-            const remaining = Math.max(0, MIN_LOADING_TIME - elapsed);
+        setTimeout(finishLoading, MIN_LOADING_TIME + 500);
+
+        /* ============ COPY URL ============ */
+        function copyUrl() {
+            const url = 'https://vextelbot.github.io/vex/';
             
-            if (remaining > 0) {
-                setTimeout(finishLoading, remaining);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast();
+                }).catch(() => {
+                    fallbackCopy(url);
+                });
             } else {
-                finishLoading();
+                fallbackCopy(url);
             }
         }
 
-        function onFrameLoad() {
-            frameLoaded = true;
-            tryFinish();
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (e) {}
+            document.body.removeChild(ta);
         }
 
-        setTimeout(() => {
-            if (!loadingFinished) {
-                finishLoading();
-            }
-        }, 12000);
+        let toastTimeout;
+        function showToast() {
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
 
+        /* ============ PREVENT ZOOM ON DOUBLE TAP ============ */
         let lastTouch = 0;
         document.addEventListener('touchend', (e) => {
             const now = Date.now();
@@ -1516,12 +1213,6 @@
             }
             lastTouch = now;
         }, { passive: false });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F12') e.preventDefault();
-            if (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) e.preventDefault();
-            if (e.ctrlKey && e.key.toLowerCase() === 'u') e.preventDefault();
-        });
     </script>
 
 </body>
